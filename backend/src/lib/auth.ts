@@ -23,14 +23,14 @@ export const protectedPlugin = new Elysia({ name: "protected-plugin" })
   .use(jwt({ name: "jwt", secret: JWT_SECRET }))
   .derive(
     { as: "scoped" },
-    async ({ headers, jwt }: any): Promise<{ auth: AuthPayload | null }> => {
+    async ({ headers, jwt }): Promise<{ auth: AuthPayload | null }> => {
       const authHeader =
         (headers as Record<string, string>)["authorization"] || "";
       const token = authHeader.startsWith("Bearer ")
         ? authHeader.slice(7).trim()
         : "";
       if (!token) return { auth: null };
-      const payload = await (jwt as any).verify(token);
+      const payload = await (jwt).verify(token);
       if (!payload) return { auth: null };
       return { auth: payload as AuthPayload };
     },
@@ -42,5 +42,6 @@ export const protectedPlugin = new Elysia({ name: "protected-plugin" })
     },
   );
 
-export const hasRole = (userRole: Role, allowed: Role[]) =>
-  allowed.includes(userRole);
+export const hasRole = (userRole: Role, allowed: Role[]) =>{
+  return allowed.includes(userRole);
+}
