@@ -2,17 +2,17 @@ import { type AuthPayload } from "../../../lib/auth";
 import { tenantService } from "../services/tenant.service";
 
 export const tenantController = {
-  list: ({ auth }: { auth: AuthPayload }) => tenantService.list(auth),
-  getMe: ({ auth }: { auth: AuthPayload }) => tenantService.getMe(auth),
-  create: ({ auth, body }: { auth: AuthPayload; body: any }) =>
-    tenantService.create(auth, body),
+  list: ( context: { auth: AuthPayload|null }) => tenantService.list(context.auth as AuthPayload),
+  getMe: (context: { auth: AuthPayload|null }) => tenantService.getMe(context.auth as AuthPayload),
+  create: (context: { auth: AuthPayload|null, body: any }) =>
+    tenantService.create(context.auth as AuthPayload, context.body),
   update: ({
     auth,
     body,
     params,
   }: {
-    auth: AuthPayload;
+    auth: AuthPayload|null;
     body: any;
     params: any;
-  }) => tenantService.update(auth, params.id, body),
+  }) => tenantService.update(auth as AuthPayload, params.id, body),
 };
