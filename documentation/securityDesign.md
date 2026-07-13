@@ -1,4 +1,5 @@
 # Security Design Document
+
 ## Multi-Tenant SaaS MVP
 
 **Version:** 1.0  
@@ -28,17 +29,16 @@
 17. Secrets Management
 18. HTTPS & Transport Security
 19. CORS Strategy
-20. Security Headers
-21. Error Handling & Information Disclosure
-22. Logging & Monitoring
-23. Audit Logging
-24. Security Testing
-25. Backup & Recovery
-26. Incident Response
-27. Common Attack Vectors
-28. Security Assumptions
-29. Future Security Enhancements
-30. Security Checklist
+20. Error Handling & Information Disclosure
+21. Logging & Monitoring
+22. Audit Logging
+23. Security Testing
+24. Backup & Recovery
+25. Incident Response
+26. Secure Request Processing
+27. Security Assumptions
+28. Future Security Enhancements
+29. Security Checklist
 
 ---
 
@@ -63,16 +63,16 @@ Core security goals include:
 
 # 2. Security Objectives
 
-| Objective | Description |
-|-----------|-------------|
-| Confidentiality | Prevent unauthorized data access |
-| Integrity | Prevent unauthorized modification |
-| Availability | Maintain service reliability |
-| Tenant Isolation | Prevent cross-tenant access |
-| Authentication | Verify user identity |
-| Authorization | Enforce least privilege |
-| Auditability | Record important security events |
-| Compliance Readiness | Follow industry best practices |
+| Objective            | Description                       |
+| -------------------- | --------------------------------- |
+| Confidentiality      | Prevent unauthorized data access  |
+| Integrity            | Prevent unauthorized modification |
+| Availability         | Maintain service reliability      |
+| Tenant Isolation     | Prevent cross-tenant access       |
+| Authentication       | Verify user identity              |
+| Authorization        | Enforce least privilege           |
+| Auditability         | Record important security events  |
+| Compliance Readiness | Follow industry best practices    |
 
 ---
 
@@ -82,7 +82,6 @@ The application follows these principles:
 
 - Defense in Depth
 - Least Privilege
-- Secure by Default
 - Fail Securely
 - Zero Trust
 - Input Validation
@@ -135,20 +134,17 @@ BusinessLogic --> Logs
 
 Potential threats include:
 
-| Threat | Risk |
-|---------|------|
-| Stolen JWT | High |
-| SQL Injection | High |
-| Cross Site Scripting | High |
-| Broken Access Control | Critical |
-| IDOR | Critical |
-| Brute Force | Medium |
-| Credential Stuffing | High |
-| Replay Attack | Medium |
-| Clickjacking | Medium |
-| Session Hijacking | High |
+| Threat                  | Risk     |
+| ----------------------- | -------- |
+| Stolen JWT              | High     |
+| SQL Injection           | High     |
+| Cross Site Scripting    | High     |
+| Broken Access Control   | Critical |
+| Brute Force             | Medium   |
+| Credential Stuffing     | High     |
+| Replay Attack           | Medium   |
 | Sensitive Data Exposure | Critical |
-| Privilege Escalation | Critical |
+| Privilege Escalation    | Critical |
 
 ---
 
@@ -288,30 +284,30 @@ Permission --> Deny
 
 ## Roles
 
-| Role | Description |
-|------|-------------|
-| Super Admin | Platform administrator |
+| Role         | Description                |
+| ------------ | -------------------------- |
+| Super Admin  | Platform administrator     |
 | Tenant Admin | Organization administrator |
-| Member | Standard user |
+| Member       | Standard user              |
 
 ---
 
 ## RBAC Permission Matrix
 
-| Permission | Super Admin | Tenant Admin | Member |
-|------------|------------|-------------|--------|
-| Manage Platform | ✅ | ❌ | ❌ |
-| Create Tenant | ✅ | ❌ | ❌ |
-| Delete Tenant | ✅ | ❌ | ❌ |
-| View Tenant | ✅ | ✅ | ✅ |
-| Update Tenant | ✅ | ✅ | ❌ |
-| Invite Users | ✅ | ✅ | ❌ |
-| Remove Users | ✅ | ✅ | ❌ |
-| Manage Roles | ✅ | ✅ | ❌ |
-| View Dashboard | ✅ | ✅ | ✅ |
-| Manage Profile | ✅ | ✅ | ✅ |
-| View Users | ✅ | ✅ | Limited |
-| Update Own Profile | ✅ | ✅ | ✅ |
+| Permission         | Super Admin | Tenant Admin | Member  |
+| ------------------ | ----------- | ------------ | ------- |
+| Manage Platform    | ✅          | ❌           | ❌      |
+| Create Tenant      | ✅          | ❌           | ❌      |
+| Delete Tenant      | ✅          | ❌           | ❌      |
+| View Tenant        | ✅          | ✅           | ✅      |
+| Update Tenant      | ✅          | ✅           | ❌      |
+| Invite Users       | ✅          | ✅           | ❌      |
+| Remove Users       | ✅          | ✅           | ❌      |
+| Manage Roles       | ✅          | ✅           | ❌      |
+| View Dashboard     | ✅          | ✅           | ✅      |
+| Manage Profile     | ✅          | ✅           | ✅      |
+| View Users         | ✅          | ✅           | Limited |
+| Update Own Profile | ✅          | ✅           | ✅      |
 
 ---
 
@@ -421,12 +417,12 @@ Passwords are:
 
 Password policy:
 
-| Requirement | Value |
-|------------|-------|
-| Minimum Length | 8+ |
-| Uppercase | Recommended |
-| Lowercase | Required |
-| Number | Required |
+| Requirement       | Value       |
+| ----------------- | ----------- |
+| Minimum Length    | 8+          |
+| Uppercase         | Recommended |
+| Lowercase         | Required    |
+| Number            | Required    |
 | Special Character | Recommended |
 
 ---
@@ -533,7 +529,6 @@ Sensitive values
 
 Uploads
 
-- Validate MIME type
 - Validate extension
 - File size limit
 - Virus scanning (future)
@@ -580,7 +575,6 @@ Requirements
 - TLS 1.2+
 - HSTS enabled
 - Secure cookies
-- Certificate management
 
 ---
 
@@ -603,22 +597,7 @@ Configuration
 
 ---
 
-# 20. Security Headers
-
-Recommended headers
-
-| Header | Purpose |
-|---------|----------|
-| CSP | Reduce XSS |
-| HSTS | HTTPS enforcement |
-| X-Frame-Options | Prevent Clickjacking |
-| X-Content-Type-Options | Prevent MIME sniffing |
-| Referrer-Policy | Privacy |
-| Permissions-Policy | Browser capability control |
-
----
-
-# 21. Error Handling & Information Disclosure
+# 20. Error Handling & Information Disclosure
 
 Never expose
 
@@ -636,7 +615,7 @@ Responses should return
 
 ---
 
-# 22. Logging & Monitoring
+# 21. Logging & Monitoring
 
 Log
 
@@ -659,21 +638,21 @@ Never log
 
 ---
 
-# 23. Audit Logging
+# 22. Audit Logging
 
 Audit events
 
-| Event | Logged |
-|---------|--------|
-| Login | Yes |
-| Logout | Yes |
-| Password Change | Yes |
-| User Creation | Yes |
-| User Deletion | Yes |
-| Role Change | Yes |
-| Tenant Creation | Yes |
-| Tenant Update | Yes |
-| Tenant Delete | Yes |
+| Event           | Logged |
+| --------------- | ------ |
+| Login           | Yes    |
+| Logout          | Yes    |
+| Password Change | Yes    |
+| User Creation   | Yes    |
+| User Deletion   | Yes    |
+| Role Change     | Yes    |
+| Tenant Creation | Yes    |
+| Tenant Update   | Yes    |
+| Tenant Delete   | Yes    |
 
 Audit fields
 
@@ -687,7 +666,7 @@ Audit fields
 
 ---
 
-# 24. Security Testing
+# 23. Security Testing
 
 Testing includes
 
@@ -704,7 +683,7 @@ Testing includes
 
 ---
 
-# 25. Backup & Recovery
+# 24. Backup & Recovery
 
 Recommendations
 
@@ -716,14 +695,14 @@ Recommendations
 
 Recovery goals
 
-| Metric | Target |
-|---------|---------|
-| RPO | <24 Hours |
-| RTO | <4 Hours |
+| Metric | Target    |
+| ------ | --------- |
+| RPO    | <24 Hours |
+| RTO    | <4 Hours  |
 
 ---
 
-# 26. Incident Response
+# 25. Incident Response
 
 Steps
 
@@ -745,29 +724,7 @@ Incidents
 
 ---
 
-# 27. Common Attack Vectors
-
-| Attack | Mitigation |
-|---------|------------|
-| SQL Injection | Parameterized queries |
-| XSS | Output encoding + CSP |
-| CSRF | SameSite cookies, CSRF tokens if cookie auth is introduced |
-| IDOR | Ownership validation + tenant checks |
-| Broken Authentication | Secure JWT + strong passwords |
-| Broken Access Control | RBAC middleware |
-| Clickjacking | X-Frame-Options |
-| Replay Attack | Token expiration + HTTPS |
-| Brute Force | Rate limiting + lockout |
-| Credential Stuffing | MFA (future), rate limiting, monitoring |
-| Session Hijacking | HTTPS + secure token storage |
-| Information Disclosure | Generic errors |
-| Privilege Escalation | Permission validation |
-| SSRF | Validate outbound requests, restrict network access (if external integrations are added) |
-| DoS | Rate limiting, request size limits, infrastructure protections |
-
----
-
-## Secure Request Processing
+# 26 Secure Request Processing
 
 ```mermaid
 flowchart TD
@@ -799,7 +756,7 @@ Database --> Response
 
 ---
 
-# 28. Security Assumptions
+# 27. Security Assumptions
 
 - HTTPS is enforced in production.
 - JWT signing keys are securely managed and rotated when necessary.
@@ -811,12 +768,11 @@ Database --> Response
 
 ---
 
-# 29. Future Security Enhancements
+# 28. Future Security Enhancements
 
 Planned improvements include:
 
 - Multi-Factor Authentication (MFA)
-- Single Sign-On (SAML/OIDC)
 - OAuth providers
 - Device management
 - Refresh token reuse detection
@@ -826,41 +782,31 @@ Planned improvements include:
 - Bot detection
 - Distributed rate limiting
 - Automated secret rotation
-- Security Information and Event Management (SIEM) integration
-- Continuous vulnerability scanning
 - Data encryption using customer-managed keys
-- Immutable audit logs
-- Compliance support (SOC 2, ISO 27001)
 
 ---
 
-# 30. Security Checklist
+# 29. Security Checklist
 
-| Category | Status |
-|----------|--------|
-| HTTPS Enabled | ✓ |
-| JWT Authentication | ✓ |
-| RBAC | ✓ |
-| Tenant Isolation | ✓ |
-| Input Validation | ✓ |
-| Output Encoding | ✓ |
-| Password Hashing | ✓ |
-| Secure Secrets | ✓ |
-| Environment Separation | ✓ |
-| Logging | ✓ |
-| Audit Logs | ✓ |
-| Database Constraints | ✓ |
-| SQL Injection Protection | ✓ |
-| XSS Protection | ✓ |
-| IDOR Protection | ✓ |
-| Brute Force Protection | ✓ |
-| Secure Headers | ✓ |
-| CORS Configuration | ✓ |
-| Backup Strategy | ✓ |
-| Incident Response Plan | ✓ |
-| Security Testing | ✓ |
-| Dependency Scanning | ✓ |
-| Future MFA Support | Planned |
+| Category               | Status  |
+| ---------------------- | ------- |
+| HTTPS Enabled          | ✓       |
+| JWT Authentication     | ✓       |
+| RBAC                   | ✓       |
+| Tenant Isolation       | ✓       |
+| Input Validation       | ✓       |
+| Output Encoding        | ✓       |
+| Password Hashing       | ✓       |
+| Secure Secrets         | ✓       |
+| Logging                | ✓       |
+| Database Constraints   | ✓       |
+| Brute Force Protection | ✓       |
+| CORS Configuration     | ✓       |
+| Backup Strategy        | ✓       |
+| Incident Response Plan | ✓       |
+| Security Testing       | ✓       |
+| Dependency Scanning    | ✓       |
+| Future MFA Support     | Planned |
 
 ---
 
