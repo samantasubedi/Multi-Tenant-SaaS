@@ -70,7 +70,7 @@ This matrix consolidates permissions across **every feature and operation** in t
 | 1 | Multi-Tenant | Create tenant (via registration) | ✅ | ✅ | ❌ | ✅ |
 | 2 | Multi-Tenant | Access data across tenants | ✅ | ❌ | ❌ | ❌ |
 | 3 | Authentication | Register | N/A | N/A | N/A | ✅ |
-| 4 | Authentication | Login | ✅ | ✅ | ✅ | ✅ (attempt only) |
+| 4 | Authentication | Login | ✅ | ✅ | ✅ | ✅ |
 | 5 | Authentication | Logout | ✅ | ✅ | ✅ | ❌ |
 | 6 | Authentication | Access protected routes | ✅ | ✅ | ✅ | ❌ |
 | 7 | RBAC | View own role | ✅ | ✅ | ✅ | ❌ |
@@ -316,7 +316,7 @@ sequenceDiagram
 ### 2.16 Future Enhancements
 - Password reset ("forgot password") flow.
 - Multi-factor authentication (MFA).
-- Social login / SSO (Google, Microsoft, SAML).
+- Social login / SSO (Google, Microsoft).
 - Session/device management ("log out of all devices").
 
 ---
